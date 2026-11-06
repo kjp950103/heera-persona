@@ -8,6 +8,7 @@
 <title>김희라 그리기</title>
 <meta property="og:title" content="희라는 어떤 사람일까요?">
 <meta property="og:description" content="퓌라 팀이 함께 그리는 페르소나, 3분이면 끝나요">
+<meta property="og:image" content="https://kjp950103.github.io/heera-persona/heera.jpg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/toss/tossface@1.6.1/dist/tossface.css">
 <style>
@@ -98,6 +99,8 @@ textarea.big::placeholder{color:var(--g400)}
 /* 시작 */
 .intro{align-items:center;text-align:center;padding-top:28px}
 .hero-e{font-size:96px;margin:24px 0 28px}
+.face{width:128px;height:128px;border-radius:50%;object-fit:cover;margin:20px 0 26px;box-shadow:0 0 0 6px var(--blue50), 0 10px 30px rgba(49,130,246,.18)}
+.face.sm{width:48px;height:48px;margin:0;box-shadow:none;flex:none}
 .intro h1{font-size:28px}
 .intro .desc{font-size:17px}
 .persona{margin-top:36px;width:100%;border-radius:20px;background:var(--g50);padding:22px 22px 18px;text-align:left}
@@ -231,11 +234,11 @@ function render(){
 function renderIntro(){
   const n = all ? all.length : null;
   view.append(h("section", {class:"screen intro"},
-    emoji("🧘‍♀️", "hero-e rise"),
+    h("img", {class:"face rise", src:"heera.jpg", alt:"김희라", width:"128", height:"128"}),
     h("h1", {class:"rise", style:"animation-delay:.05s"}, "희라는 어떤 사람일까요?"),
     h("p", {class:"desc rise", style:"animation-delay:.1s"}, ...lines("퓌라 팀이 함께 그리는 광고 페르소나예요.\n희라가 되어 답해 주세요. 정답은 없어요.")),
     h("div", {class:"persona rise", style:"animation-delay:.15s"},
-      h("div", {class:"name"}, emoji("👩🏻"), h("div", null, h("b", null, "김희라"), h("span", null, "44세 · 여성"))),
+      h("div", {class:"name"}, h("img", {class:"face sm", src:"heera.jpg", alt:"", width:"48", height:"48"}), h("div", null, h("b", null, "김희라"), h("span", null, "44세 · 여성"))),
       ...[["철학","웰니스"],["성격","주체적, 털털함, 자기만족, 중성적, 완벽주의, 지적"],["취미","요가, 필라테스, 러닝, 다도, 독서, 일"],["식성","슴슴한 음식, 차, 소식, 술·담배 안 함"]]
         .map(([k,v])=>h("div", {class:"row"}, h("span", {class:"k"}, k), h("span", {class:"v"}, v)))
     ),
