@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>김희라 그리기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* 레이아웃: 가운데 한 줄 카드(최대 560px), 질문은 한 장씩, 결과는 같은 폭의 세로 목록 */
+:root{
+  --bg:#F2F4F0; --surface:#FFFFFF; --ink:#1F2A22; --muted:#66705F; --line:#DDE3D8;
+  --tea:#3E6B4E; --tea-soft:#E3ECE4; --gold:#B08A3E;
+  --display:"Gowun Batang", "Nanum Myeongjo", serif;
+  --body:"Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141915; --surface:#1D241F; --ink:#E6ECE5; --muted:#9AA595; --line:#2E3830;
+  --tea:#8CC29E; --tea-soft:#25352A; --gold:#D6B36A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141915; --surface:#1D241F; --ink:#E6ECE5; --muted:#9AA595; --line:#2E3830;
+  --tea:#8CC29E; --tea-soft:#25352A; --gold:#D6B36A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:28px 64px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2{font-family:var(--display);font-weight:700;text-wrap:balance;margin:0}
+h1{font-size:30px;line-height:1.3}
+h2{font-size:21px;line-height:1.4}
+p{margin:0}
+.muted{color:var(--muted)}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--tea);font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.profile{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14px}
+.profile dt{color:var(--muted)} .profile dd{margin:0}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--tea);color:var(--surface);border:0;border-radius:10px;padding:13px 18px;font-weight:700;font-size:15px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row .btn{flex:1}
+:focus-visible{outline:2px solid var(--tea);outline-offset:2px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--ink)}
+.opt[aria-pressed="true"]{border-color:var(--tea);background:var(--tea-soft);font-weight:500}
+input[type=text],textarea,select{font:inherit;width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;background:var(--surface);color:var(--ink)}
+textarea{min-height:84px;resize:vertical}
+.progress{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--tea);transition:width .25s}
+@media (prefers-reduced-motion:reduce){.progress i{transition:none}}
+.qmeta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.note{font-size:13px;color:var(--muted)}
+.status{font-size:13px;color:var(--muted)}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:4px 10px;align-items:center;font-size:14px}
+.bar .track{grid-column:1/3;height:8px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar .track i{display:block;height:100%;background:var(--muted)}
+.bar.top .track i{background:var(--tea)}
+.bar .pct{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px}
+.pill.agree{background:var(--tea-soft);color:var(--tea)}
+.pill.split{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.qhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.qhead h3{margin:0;font-size:15px;font-weight:700;min-width:0}
+.quotes{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.quotes li{list-style:none;padding:8px 12px;border-left:2px solid var(--line)}
+.quotes ul{margin:0;padding:0}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+.summary b{display:block;font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
+.summary span{font-size:12px;color:var(--muted)}
+.mine{font-size:12px;color:var(--tea);font-weight:700}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="app">
+  <section class="card" id="intro">
+    <span class="eyebrow">퓌라 팀 페르소나 게임</span>
+    <h1>당신이 아는 김희라를 그려 주세요</h1>
+    <p>광고 페르소나 '김희라'를 팀이 함께 만듭니다. 정답은 없어요. 희라라면 어떨지 떠오르는 대로 고르면 됩니다. 16문항, 3분이면 끝나요.</p>
+    <dl class="profile">
+      <dt>이름</dt><dd>김희라 · 44세 · 여성</dd>
+      <dt>생활 철학</dt><dd>웰니스</dd>
+      <dt>성격</dt><dd>주체적 · 털털함 · 자기만족 · 중성적 · 완벽주의 · 지적</dd>
+      <dt>취미</dt><dd>요가 · 필라테스 · 러닝 · 다도 · 독서 · 일</dd>
+      <dt>식성</dt><dd>슴슴한 음식 · 차 · 소식 · 술·담배 안 함</dd>
+    </dl>
+    <p class="note">여기까지는 11/4 회의에서 정한 골자예요. 이 사람의 나머지를 채워 주세요. 모두 낸 뒤에 팀 전체 결과가 열립니다.</p>
+    <label for="name" class="note">내 이름 (같은 이름으로 다시 내면 답이 고쳐져요)</label>
+    <input type="text" id="name" maxlength="20" placeholder="예: 김준표">
+    <button class="btn" id="start" disabled>시작하기</button>
+    <p class="status" id="status">불러오는 중…</p>
+  </section>
+
+  <section class="card" id="quiz" hidden>
+    <div class="qmeta"><span id="qnum"></span><span id="qhint"></span></div>
+    <div class="progress"><i id="bar" style="width:0"></i></div>
+    <h2 id="qtitle"></h2>
+    <div class="opts" id="opts"></div>
+    <input type="text" id="other" placeholder="직접 쓰기 (선택)" maxlength="80">
+    <textarea id="free" maxlength="200" hidden></textarea>
+    <div class="row">
+      <button class="btn ghost" id="prev">이전</button>
+      <button class="btn" id="next">다음</button>
+    </div>
+  </section>
+
+  <section id="result" hidden style="display:flex;flex-direction:column;gap:20px"></section>
+</div>
+
+<script>
+const Q = [
+  {id:"job", t:"희라는 무슨 일을 하나요?", o:["회사원(관리자급)","전문직(의료·법률 등)","자기 사업·프리랜서","크리에이티브 직군","교육·강사","전업 주부"]},
+  {id:"family", t:"누구와 살고 있나요?", o:["혼자","배우자와 둘이","배우자·어린 자녀와","배우자·다 큰 자녀와","부모님과"]},
+  {id:"place", t:"어디에 사나요?", o:["서울 도심","수도권 신도시","지방 대도시","지방 중소도시"]},
+  {id:"skin", t:"가장 큰 피부 고민은? (최대 2개)", max:2, o:["탄력·처짐","잔주름","속건조·당김","칙칙함·기미","예민·붉은기","모공·피부결"]},
+  {id:"derm", t:"피부과·시술은?", o:["꾸준히 다닌다","다니다 지쳐서 그만뒀다","가끔 중요한 일 앞두고만","시술은 싫어서 안 한다","관심은 있지만 아직"]},
+  {id:"makeup", t:"화장은 어느 정도?", o:["거의 안 함(선크림 정도)","가벼운 베이스","매일 제대로"]},
+  {id:"spend", t:"한 달 스킨케어에 쓰는 돈은?", o:["5만 원 이하","5~10만 원","10~20만 원","20만 원 이상"]},
+  {id:"time", t:"희라의 '나만의 시간'은 언제?", o:["이른 아침","낮","저녁","늦은 밤"]},
+  {id:"apps", t:"폰에서 가장 오래 쓰는 앱은? (최대 3개)", max:3, o:["인스타그램","유튜브","네이버","카카오톡","스레드","핀터레스트","팟캐스트·오디오","뉴스레터·메일"]},
+  {id:"trust", t:"화장품을 고를 때 가장 믿는 건?", o:["피부과 의사·전문가","닮고 싶은 사람(인플루언서)","친한 친구의 추천","성분·연구 자료를 직접 확인","많은 리뷰·후기","백화점·매장 상담"]},
+  {id:"check", t:"광고를 보고 끌리면 제일 먼저 하는 일은?", o:["네이버에 브랜드 검색","브랜드 인스타 둘러보기","자사몰 상세페이지 정독","유튜브에서 후기 찾기","지인에게 물어보기","저장만 하고 잊음"]},
+  {id:"decide", t:"결제 버튼을 누르게 하는 한 방은?", o:["임상 수치","기술·연구진 설명","실제 사용자 후기","믿는 사람의 추천","환불 보장","첫 구매 혜택"]},
+  {id:"block", t:"사지 않고 나가는 이유는? (최대 2개)", max:2, o:["광고 냄새·과장","처음 보는 브랜드라 불안","가격","쓰던 제품이 있어서","효과 확신이 없어서","구매 과정이 번거로워서"]},
+  {id:"tone", t:"희라에게 먹힐 광고는?", o:["조용하고 감도 높은 영상","숫자·근거가 담긴 카드","실사용자 인터뷰","전문가 설명","일상 브이로그"]},
+  {id:"brands", t:"희라 화장대에 있을 것 같은 브랜드는?", free:true, ph:"예: 설화수, 라메르… (쉼표로 구분)"},
+  {id:"oneline", t:"희라를 한 문장으로 표현하면?", free:true, ph:"예: 남 말보다 자기 기준이 분명한 사람"},
+];
+const DRAFT_KEY = "heera-draft-v1";
+let all = [], answers = {}, step = 0, submitted = false;
+const $ = s => document.querySelector(s);
+const myName = () => $("#name").value.trim();
+
+function loadDraft(){ try{ const d = JSON.parse(localStorage.getItem(DRAFT_KEY)||"null"); if(d){answers=d.answers||{}; $("#name").value=d.name||""; submitted=!!d.submitted;} }catch(e){} }
+function saveDraft(){ try{ localStorage.setItem(DRAFT_KEY, JSON.stringify({answers, name:myName(), submitted})); }catch(e){} }
+
+function setStatus(t){ $("#status").textContent = t; }
+function updateStart(){ $("#start").disabled = !myName(); }
+$("#name").addEventListener("input", ()=>{ updateStart(); saveDraft(); });
+
+// 응답 저장소: kimjunpyo950103 구글 시트에 붙은 Apps Script 웹앱
+const API = "https://script.google.com/macros/s/AKfycbxXkBOA7YLDAp0gdTPkit98xvMJfskXuZF1yZC_CACtRNVjODIp_xpDK-Rxs_HsRZL4/exec";
+async function call(fn, arg){
+  const res = fn === "submitResponse"
+    ? await fetch(API, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(arg)})
+    : await fetch(API);
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || "저장에 실패했어요.");
+  return data.responses;
+}
+async function refresh(){
+  try{ all = await call("listResponses"); setStatus(`지금까지 ${all.length}명 참여`); if(!$("#result").hidden) renderResults(); }
+  catch(e){ setStatus("결과를 불러오지 못했어요. 새로고침해 주세요."); }
+}
+
+$("#start").addEventListener("click", ()=>{ $("#intro").hidden = true; $("#quiz").hidden = false; step = 0; renderQ(); });
+$("#prev").addEventListener("click", ()=>{ capture(); if(step>0){step--; renderQ();} else { $("#quiz").hidden=true; $("#intro").hidden=false; } });
+$("#next").addEventListener("click", async ()=>{ capture(); if(step < Q.length-1){ step++; renderQ(); } else { await submit(); } });
+
+function cur(){ const q=Q[step]; return answers[q.id] || (q.free ? {text:""} : {pick:[], other:""}); }
+function renderQ(){
+  const q = Q[step], a = cur();
+  $("#qnum").textContent = `${step+1} / ${Q.length}`;
+  $("#qhint").textContent = q.free ? "자유롭게" : (q.max ? `최대 ${q.max}개` : "하나만");
+  $("#bar").style.width = `${(step)/Q.length*100}%`;
+  $("#qtitle").textContent = q.t;
+  const box = $("#opts"); box.replaceChildren();
+  $("#other").hidden = !!q.free; $("#free").hidden = !q.free;
+  if(q.free){ $("#free").value = a.text||""; $("#free").placeholder = q.ph||""; }
+  else{
+    $("#other").value = a.other||"";
+    q.o.forEach(label=>{
+      const b = document.createElement("button"); b.className="opt"; b.type="button"; b.textContent=label;
+      b.setAttribute("aria-pressed", a.pick.includes(label) ? "true":"false");
+      b.addEventListener("click", ()=>{
+        const st = cur(); let pick = [...st.pick];
+        if(pick.includes(label)) pick = pick.filter(x=>x!==label);
+        else if(q.max){ if(pick.length < q.max) pick.push(label); }
+        else pick = [label];
+        answers[q.id] = {...st, pick}; saveDraft(); renderQ();
+      });
+      box.append(b);
+    });
+  }
+  $("#next").textContent = step===Q.length-1 ? (submitted ? "다시 제출하기" : "제출하고 결과 보기") : "다음";
+  $("#next").disabled = !q.free && !(cur().pick.length || (cur().other||"").trim());
+}
+function capture(){
+  const q = Q[step]; if(!q) return;
+  if(q.free) answers[q.id] = {text: $("#free").value.trim()};
+  else answers[q.id] = {...cur(), other: $("#other").value.trim()};
+  saveDraft();
+}
+$("#other").addEventListener("input", ()=>{ capture(); $("#next").disabled = !(cur().pick.length || cur().other); });
+
+async function submit(){
+  $("#next").disabled = true; $("#next").textContent = "저장 중…";
+  const body = {name: myName(), answers};
+  try{
+    all = await call("submitResponse", body);
+    submitted = true; saveDraft(); showResults();
+  }catch(e){
+    $("#next").disabled = false; $("#next").textContent = "다시 시도";
+    alertQuiz((e && e.message) || "저장에 실패했어요. 잠시 뒤 다시 눌러 주세요.");
+  }
+}
+function alertQuiz(msg){ let n = $("#qerr"); if(!n){ n=document.createElement("p"); n.id="qerr"; n.className="status"; $("#quiz").append(n);} n.textContent = msg; }
+
+function showResults(){ $("#quiz").hidden = true; $("#intro").hidden = true; $("#result").hidden = false; renderResults(); }
+
+function renderResults(){
+  const R = $("#result"); R.replaceChildren();
+  const n = all.length;
+  const head = document.createElement("section"); head.className="card";
+  head.innerHTML = `<span class="eyebrow">팀이 그린 김희라</span><h1>지금까지 결과</h1>`;
+  const agreeQs = [], splitQs = [];
+  Q.filter(q=>!q.free).forEach(q=>{ const t = tally(q); (t.top && t.top.pct>=50 ? agreeQs : splitQs).push(q.id); });
+  const sum = document.createElement("div"); sum.className="summary";
+  [[n,"참여"],[agreeQs.length,"교집합"],[splitQs.length,"갈린 문항"]].forEach(([v,l])=>{ const d=document.createElement("div"); const b=document.createElement("b"); b.textContent=v; const s=document.createElement("span"); s.textContent=l; d.append(b,s); sum.append(d); });
+  head.append(sum);
+  const rule = document.createElement("p"); rule.className="note"; rule.textContent = "교집합 = 한 보기에 절반 이상이 모인 문항. 복수 선택 문항은 그 보기를 고른 사람 비율이에요.";
+  head.append(rule);
+  const again = document.createElement("button"); again.className="btn ghost"; again.textContent="내 답 고치기";
+  again.addEventListener("click", ()=>{ $("#result").hidden=true; $("#quiz").hidden=false; step=0; renderQ(); });
+  head.append(again);
+  R.append(head);
+
+  const me = all.find(r=>r.name===myName());
+  Q.forEach(q=>{
+    const c = document.createElement("section"); c.className="card";
+    const h = document.createElement("div"); h.className="qhead";
+    const t = document.createElement("h3"); t.textContent = q.t; h.append(t);
+    if(q.free){
+      c.append(h);
+      const texts = all.map(r=>r.answers?.[q.id]?.text).filter(Boolean);
+      const ul = document.createElement("ul"); const wrap=document.createElement("div"); wrap.className="quotes"; wrap.append(ul);
+      if(!texts.length){ const li=document.createElement("li"); li.textContent="아직 답이 없어요"; ul.append(li); }
+      texts.forEach(x=>{ const li=document.createElement("li"); li.textContent=x; ul.append(li); });
+      c.append(wrap); R.append(c); return;
+    }
+    const tl = tally(q);
+    const pill = document.createElement("span"); pill.className = "pill " + (tl.top && tl.top.pct>=50 ? "agree":"split");
+    pill.textContent = tl.top && tl.top.pct>=50 ? "교집합" : "갈림"; h.append(pill); c.append(h);
+    tl.rows.forEach(r=>{
+      const b = document.createElement("div"); b.className = "bar" + (tl.top && r.label===tl.top.label && r.pct>=50 ? " top":"");
+      const l = document.createElement("span"); l.textContent = r.label;
+      if(me && (me.answers?.[q.id]?.pick||[]).includes(r.label)){ const m=document.createElement("span"); m.className="mine"; m.textContent="  내 선택"; l.append(m); }
+      const p = document.createElement("span"); p.className="pct"; p.textContent = `${r.pct}%`;
+      const tr = document.createElement("div"); tr.className="track"; const i=document.createElement("i"); i.style.width = r.pct+"%"; tr.append(i);
+      b.append(l,p,tr); c.append(b);
+    });
+    const others = all.map(r=>r.answers?.[q.id]?.other).filter(Boolean);
+    if(others.length){ const o=document.createElement("p"); o.className="note"; o.textContent = "직접 쓴 답: " + others.join(" / "); c.append(o); }
+    R.append(c);
+  });
+}
+function tally(q){
+  const n = all.length || 1, cnt = {};
+  q.o.forEach(o=>cnt[o]=0);
+  all.forEach(r=>(r.answers?.[q.id]?.pick||[]).forEach(p=>{ if(p in cnt) cnt[p]++; }));
+  const rows = q.o.map(label=>({label, pct: Math.round(cnt[label]/n*100)})).sort((a,b)=>b.pct-a.pct);
+  const top = all.length ? rows[0] : null;
+  return {rows, top};
+}
+
+loadDraft(); updateStart();
+refresh().then(()=>{ if(submitted && all.some(r=>r.name===myName())) showResults(); });
+setInterval(()=>{ if(!document.hidden && !$("#result").hidden) refresh(); }, 30000);
+</script>
+</body>
+</html>
